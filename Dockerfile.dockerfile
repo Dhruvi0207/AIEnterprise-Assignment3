@@ -1,24 +1,24 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.10-slim
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim
 
-# Set the working directory
-WORKDIR /
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Copy the requirements.txt file into the container
-COPY requirements.txt requirements.txt
-
-# Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Set the working directory in the container
+WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . .
+COPY . /app
 
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
 
 # Define environment variable
-ENV FLASK_APP=FinalCode.py
-ENV FLASK_ENV=production
+ENV FLASK_APP finalcode.py
 
-# Run the app using gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+# Run app.py when the container launches
+CMD ["flask", "run", "--host=0.0.0.0"]
